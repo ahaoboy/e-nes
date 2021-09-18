@@ -43,19 +43,12 @@ export const createNes: (c: Config) => Promise<WasmNes> = async ({
   nes.set_rom(buf);
   setupAudio(nes);
   nes.bootup();
-
   const inv = 1000 / fps;
-  let prev = performance.now();
   const raf = (f: () => void) => {
-    requestAnimationFrame(f);
+    setTimeout(f, inv);
   };
   const stepFrame = () => {
     raf(stepFrame);
-    const now = performance.now();
-    if (now - prev < inv) {
-      return;
-    }
-    prev = now;
     nes.step_frame();
     nes.update_pixels(pixels);
     ctx.putImageData(imageData, 0, 0);

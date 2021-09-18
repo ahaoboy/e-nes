@@ -1,5 +1,5 @@
 import { createNes, Button } from "../../src";
-import nesUrl from "../Island3.nes?url";
+import romUrl from "../Island3.nes?url";
 import "./style.css";
 const getButton = (key: string) => {
   console.log("key", key);
@@ -40,7 +40,8 @@ const getButton = (key: string) => {
 };
 async function init() {
   const canvas = document.getElementById("nes")! as HTMLCanvasElement;
-  const nes = await createNes({ rom: nesUrl, canvas });
+  const q = new URLSearchParams(location.search).get("rom");
+  const nes = await createNes({ rom: q || romUrl, canvas });
   window.addEventListener(
     "keydown",
     (event) => {
