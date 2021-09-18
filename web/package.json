@@ -1,0 +1,14 @@
+{
+  "name": "web",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "cp": "cp ./Island3.nes ./dist/Island3.nes",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "^4.3.2",
+    "vite": "^2.5.4"
+  }
+}
