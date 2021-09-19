@@ -1,9 +1,9 @@
 import { createNes, Button } from "../../src";
 import romUrl from "../Island3.nes?url";
 import "./style.css";
+import { GamePad, Event } from "e-gamepad";
 
 const isPc = typeof window.orientation !== "number";
-
 const getButton = (key: string) => {
   switch (key) {
     case "h": // space
@@ -30,6 +30,7 @@ async function init() {
   const canvas = document.getElementById("nes")! as HTMLCanvasElement;
   const q = new URLSearchParams(location.search).get("rom");
   const nes = await createNes({ rom: q || romUrl, canvas });
+  const pad = new GamePad();
   window.addEventListener(
     "keydown",
     (event) => {
@@ -55,6 +56,32 @@ async function init() {
     false
   );
 
+  const padMap: Record<number, string> = {
+    12: "w",
+    14: "a",
+    15: "d",
+    13: "s",
+    9: "h",
+    8: "g",
+    2: "k",
+    0: "l",
+  };
+  pad.on(Event.Down, (data) => {
+    data[0].buttons.forEach((i, k) => {
+      if (i.state === Event.Down) {
+        const button = getButton(padMap[k]);
+        button && nes.press_button(button);
+      }
+    });
+  });
+  pad.on(Event.Up, (data) => {
+    data[0].buttons.forEach((i, k) => {
+      if (i.state === Event.Up) {
+        const button = getButton(padMap[k]);
+        button && nes.release_button(button);
+      }
+    });
+  });
   if (isPc) {
     document.getElementById("pad-wrap")!.style.display = "none";
   } else {
@@ -90,7 +117,6 @@ const start = () => {
   document.getElementById("app")!.style.display = "flex";
   !isPc && (document.getElementById("pad-wrap")!.style.display = "flex");
   document.getElementById("start-button")!.style.display = "none";
-  console.log("init");
   init();
 };
 
