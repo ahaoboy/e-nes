@@ -61,7 +61,7 @@ async function init() {
     document.getElementById("info")!.style.display = "none";
 
     for (const i of "wasdghlk") {
-      const up = (e:any) => {
+      const up = (e: any) => {
         const button = getButton(i);
         if (button === null) {
           return;
@@ -69,7 +69,7 @@ async function init() {
         nes.press_button(button);
         e.preventDefault();
       };
-      const down = (e:any) => {
+      const down = (e: any) => {
         const button = getButton(i);
         if (button === null) {
           return;
@@ -84,5 +84,16 @@ async function init() {
     }
   }
 }
+const start = () => {
+  s.removeEventListener("click", start);
+  s.removeEventListener("touchstart", start);
+  document.getElementById("app")!.style.display = "flex";
+  !isPc && (document.getElementById("pad-wrap")!.style.display = "flex");
+  document.getElementById("start-button")!.style.display = "none";
+  console.log("init");
+  init();
+};
 
-init();
+const s = document.getElementById("start-button")!;
+s.addEventListener("click", start);
+s.addEventListener("touchstart", start);
