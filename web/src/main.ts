@@ -1,8 +1,10 @@
 import { createNes, Button } from "../../src";
 import romUrl from "../Island3.nes?url";
 import "./style.css";
+
+const isPc = typeof window.orientation !== "number";
+
 const getButton = (key: string) => {
-  console.log("key", key);
   switch (key) {
     case "h": // space
       return Button.Start;
@@ -14,26 +16,12 @@ const getButton = (key: string) => {
       return Button.Joypad1Right;
     case "s": // Down
       return Button.Joypad1Down;
-    // case 50: // 2
-    //   return Button.Joypad2Down;
-    // case 52: // 4
-    //   return Button.Joypad2Left;
-    // case 54: // 6
-    //   return Button.Joypad2Right;
-    // case 56: // 8
-    //   return Button.Joypad2Up;
     case "l": // A
       return Button.Joypad1A;
     case "k": // B
       return Button.Joypad1B;
-    // case 82: // R
-    //   return Button.Reset;
     case "g": // S
       return Button.Select;
-    // case 88: // X
-    //   return Button.Joypad2A;
-    // case 90: // Z
-    //   return Button.Joypad2B;
     default:
       return null;
   }
@@ -67,11 +55,34 @@ async function init() {
     false
   );
 
-  const innerWidth = window.innerWidth;
-  const innerHeight = window.innerHeight;
-  // 1024 960
-  const s = Math.min(1024 / innerWidth, 960 / innerHeight);
-  console.log(s);
+  if (isPc) {
+    document.getElementById("pad-wrap")!.style.display = "none";
+  } else {
+    document.getElementById("info")!.style.display = "none";
+
+    for (const i of "wasdghlk") {
+      const up = (e:any) => {
+        const button = getButton(i);
+        if (button === null) {
+          return;
+        }
+        nes.press_button(button);
+        e.preventDefault();
+      };
+      const down = (e:any) => {
+        const button = getButton(i);
+        if (button === null) {
+          return;
+        }
+        nes.release_button(button);
+        e.preventDefault();
+      };
+      document.getElementById(i)!.addEventListener("touchstart", up);
+      document.getElementById(i)!.addEventListener("touchend", down);
+      document.getElementById(i)!.addEventListener("mouseup", up);
+      document.getElementById(i)!.addEventListener("mousedown", down);
+    }
+  }
 }
 
 init();

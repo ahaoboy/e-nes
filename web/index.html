@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vite App</title>
 </head>
+
 <body>
   <div class="app">
-    <div class="info">
+    <div id='info' class="info">
       wsad: 上下左右 <br>
       g:Select<br>
       H:Start<br>
@@ -17,6 +19,27 @@
     </div>
     <canvas id='nes'></canvas>
   </div>
+
+  <div id='pad-wrap'>
+    <div id='pad'>
+      <div class="left">
+        <button id='w' class='u'></button>
+        <button id='s' class='d'></button>
+        <button id='a' class='l'></button>
+        <button id='d' class='r'></button>
+      </div>
+      <div class='mid'>
+        <button id='g'>select</button>
+        <button id='h'> start</button>
+      </div>
+      <div class="right">
+        <button id='k'>A</button>
+        <button id='l'>B</button>
+      </div>
+    </div>
+  </div>
+
   <script type="module" src="/src/main.ts"></script>
 </body>
+
 </html>

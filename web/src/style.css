@@ -21,3 +21,60 @@ body {
   aspect-ratio: 16 / 15;
   transform: scale(0.85);
 }
+
+#pad-wrap {
+  position: relative;
+  margin-bottom: var(--w);
+}
+#pad {
+  position: absolute;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.right > button {
+  width: 50px;
+  margin-right: 15px;
+  height: 40px;
+}
+
+.mid > button {
+  background: var(--c);
+}
+.right > button {
+  background: var(--c);
+}
+.left {
+  padding-bottom: calc(var(--w) * 4);
+}
+.mid,
+.right {
+  padding-bottom: calc(var(--w) * 2);
+}
+.left > button {
+  width: var(--w);
+  height: var(--hw);
+  clip-path: polygon(100% 100%, 50% 0,  0 100%);
+  border: 0;
+  background: var(--c);
+  position: absolute;
+}
+:root {
+  --w: 40px;
+  --hw: 34px;
+  --c: rgb(222, 222, 222);
+}
+.l {
+  transform: translateX(calc(var(--w) * -1)) rotate(270deg);
+}
+.u {
+  transform: translateY(calc(var(--w) * -1)) rotate(0deg);
+}
+.d {
+  transform: translateX(calc(var(--w) * 1)) rotate(90deg);
+}
+.r {
+  transform: translateY(calc(var(--w) * 1)) rotate(180deg);
+}
