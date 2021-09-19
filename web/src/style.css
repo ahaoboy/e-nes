@@ -56,7 +56,7 @@ body {
 .left > button {
   width: var(--w);
   height: var(--hw);
-  clip-path: polygon(100% 100%, 50% 0,  0 100%);
+  clip-path: polygon(100% 100%, 50% 0, 0 100%);
   border: 0;
   background: var(--c);
   position: absolute;
@@ -66,15 +66,15 @@ body {
   --hw: 34px;
   --c: rgb(222, 222, 222);
 }
-.l {
-  transform: translateX(calc(var(--w) * -1)) rotate(270deg);
-}
-.u {
+.w {
   transform: translateY(calc(var(--w) * -1)) rotate(0deg);
+}
+.s {
+  transform: translateY(calc(var(--w) * 1)) rotate(180deg);
 }
 .d {
   transform: translateX(calc(var(--w) * 1)) rotate(90deg);
 }
-.r {
-  transform: translateY(calc(var(--w) * 1)) rotate(180deg);
+.a {
+  transform: translateX(calc(var(--w) * -1)) rotate(270deg);
 }
