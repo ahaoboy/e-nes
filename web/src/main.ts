@@ -1,5 +1,5 @@
 import { createNes, Button } from "../../src";
-import romUrl from "../Island3.nes?url";
+import romUrl from "../soccer.nes?url";
 import "./style.css";
 import { GamePad, Event } from "e-gamepad";
 
@@ -115,7 +115,9 @@ const start = () => {
   s.removeEventListener("click", start);
   s.removeEventListener("touchstart", start);
   document.getElementById("app")!.style.display = "flex";
-  !isPc && (document.getElementById("pad-wrap")!.style.display = "flex");
+  if (!isPc) {
+    document.getElementById("pad-wrap")!.style.display = "flex";
+  }
   document.getElementById("start-button")!.style.display = "none";
   init();
 };
