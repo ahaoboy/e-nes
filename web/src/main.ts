@@ -1,5 +1,5 @@
 import { createNes, Button } from "../../src";
-import romUrl from "../soccer.nes?url";
+import romUrl from "../island_3_cn.nes?url";
 import "./style.css";
 import { GamePad, Event } from "e-gamepad";
 
