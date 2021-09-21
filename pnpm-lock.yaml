@@ -2,15 +2,11 @@ lockfileVersion: 5.3
 
 specifiers:
   '@size-limit/preset-small-lib': ^5.0.3
-  e-gamepad: ^0.4.0
   husky: ^7.0.2
   size-limit: ^5.0.3
   tsdx: ^0.14.1
   tslib: ^2.3.1
   typescript: ^4.4.3
-
-dependencies:
-  e-gamepad: 0.4.0
 
 devDependencies:
   '@size-limit/preset-small-lib': 5.0.3_8702beec3da1ca862c157ec468be1b32
@@ -3345,11 +3341,6 @@ packages:
       readable-stream: 2.3.7
       stream-shift: 1.0.1
     dev: true
-
-  /e-gamepad/0.4.0:
-    resolution: {integrity: sha512-TneMHtpF0o82fupzMq7CrdYfJcdcL0QgWYkGTaSStgX1p80lEKpuvoYIvygeMZj/ikp3p8GQHHcsOSlGKkK8CA==}
-    engines: {node: '>=10'}
-    dev: false
 
   /ecc-jsbn/0.1.2:
     resolution: {integrity: sha1-OoOpBOVDUyh4dMVkt1SThoSamMk=}
