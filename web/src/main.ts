@@ -2,6 +2,7 @@ import { createNes, Button, save, load } from "../../src";
 import romUrl from "../island_3_cn.nes?url";
 import "./style.css";
 import { GamePad, Event } from "e-gamepad";
+import { set, get } from "idb-keyval";
 
 const isPc = typeof window.orientation !== "number";
 const getButton = (key: string) => {
@@ -31,33 +32,64 @@ async function init() {
   const q = new URLSearchParams(location.search).get("rom");
   const { nes, wasm } = await createNes({ rom: q || romUrl, canvas });
   const pad = new GamePad();
-  document
-    .getElementById("save")!
-    .addEventListener("click", () => save(wasm, "nes"));
-  document
-    .getElementById("load")!
-    .addEventListener("click", () => load(wasm, "nes"));
+  let checkpoint: string[] = (await get("checkpoint")) || [];
+  const checkpointDiv = document.getElementById("checkpoint")!;
+  document.getElementById("save")!.addEventListener("click", () => {
+    const now = new Date().toLocaleString();
+    checkpoint.push(now);
+    save(wasm, now);
+    set("checkpoint", checkpoint);
+    renderDiv();
+  });
+
+  const renderDiv = () => {
+    checkpointDiv.innerHTML = "";
+    checkpointDiv.appendChild(getDom());
+  };
+  const getDom = () => {
+    const wrap = new DocumentFragment();
+    for (const i of checkpoint) {
+      const btn = document.createElement("button");
+      btn.innerText = i;
+      btn.id = i;
+      btn.addEventListener("mouseup", (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        if (e.button === 2) {
+          checkpoint = checkpoint.filter((item) => item !== i);
+          renderDiv();
+        } else {
+          load(wasm, i);
+        }
+      });
+      wrap.appendChild(btn);
+    }
+    return wrap;
+  };
+  renderDiv();
   window.addEventListener(
     "keydown",
     (event) => {
+      event.stopPropagation();
+      event.preventDefault();
       const button = getButton(event.key);
       if (button === null) {
         return;
       }
       nes.press_button(button);
-      event.preventDefault();
     },
     false
   );
   window.addEventListener(
     "keyup",
     (event) => {
+      event.stopPropagation();
+      event.preventDefault();
       const button = getButton(event.key);
       if (button === null) {
         return;
       }
       nes.release_button(button);
-      event.preventDefault();
     },
     false
   );
@@ -125,6 +157,10 @@ const start = () => {
     document.getElementById("pad-wrap")!.style.display = "flex";
   }
   document.getElementById("start-button")!.style.display = "none";
+  window.oncontextmenu = function (e) {
+    //取消默认的浏览器自带右键 很重要！！
+    e.preventDefault();
+  };
   init();
 };
 
