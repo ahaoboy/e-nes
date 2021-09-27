@@ -1,6 +1,8 @@
 import init, { WasmNes } from "./nes-rust";
 export * from "./nes-rust";
 import { Config } from "./type";
+import type { InitOutput } from "./nes-rust";
+import { set, get } from "idb-keyval";
 const setupAudio = (nes: WasmNes) => {
   const audioContext = AudioContext;
   if (audioContext === undefined) {
@@ -20,7 +22,9 @@ const setupAudio = (nes: WasmNes) => {
   scriptProcessor.connect(context.destination);
 };
 
-export const createNes: (c: Config) => Promise<WasmNes> = async ({
+export const createNes: (
+  c: Config
+) => Promise<{ nes: WasmNes; wasm: InitOutput }> = async ({
   rom,
   canvas,
   fps = 60,
@@ -31,7 +35,7 @@ export const createNes: (c: Config) => Promise<WasmNes> = async ({
   } else {
     buf = rom;
   }
-  await init();
+  const wasm = await init();
   const width = 256;
   const height = 240;
   const ctx = canvas.getContext("2d")!;
@@ -54,5 +58,33 @@ export const createNes: (c: Config) => Promise<WasmNes> = async ({
     ctx.putImageData(imageData, 0, 0);
   };
   stepFrame();
-  return nes;
+  return { nes, wasm };
+};
+const clone = (src: ArrayBuffer) => {
+  const dst = new ArrayBuffer(src.byteLength);
+  new Uint8Array(dst).set(new Uint8Array(src));
+  return dst;
+};
+export const save = async (wasm: InitOutput, id: string) => {
+  const buffer = clone(wasm.memory.buffer);
+  const blob = new Blob([buffer]);
+  return set(id, blob);
+};
+
+const read = async (blob: Blob) => {
+  const fileReader = new FileReader();
+  fileReader.readAsArrayBuffer(blob);
+  return new Promise<ArrayBuffer>((r) => {
+    fileReader.onload = () => {
+      r(fileReader.result as ArrayBuffer);
+    };
+  });
+};
+
+export const load = async (wasm: InitOutput, id: string) => {
+  const blob = await get(id);
+  if (!blob) return;
+  const buffer = await read(blob);
+  const mem = wasm.memory;
+  new Uint8Array(mem.buffer).set(new Uint8Array(buffer));
 };

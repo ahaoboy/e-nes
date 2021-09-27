@@ -1,4 +1,4 @@
-import { createNes, Button } from "../../src";
+import { createNes, Button, save, load } from "../../src";
 import romUrl from "../island_3_cn.nes?url";
 import "./style.css";
 import { GamePad, Event } from "e-gamepad";
@@ -29,8 +29,14 @@ const getButton = (key: string) => {
 async function init() {
   const canvas = document.getElementById("nes")! as HTMLCanvasElement;
   const q = new URLSearchParams(location.search).get("rom");
-  const nes = await createNes({ rom: q || romUrl, canvas });
+  const { nes, wasm } = await createNes({ rom: q || romUrl, canvas });
   const pad = new GamePad();
+  document
+    .getElementById("save")!
+    .addEventListener("click", () => save(wasm, "nes"));
+  document
+    .getElementById("load")!
+    .addEventListener("click", () => load(wasm, "nes"));
   window.addEventListener(
     "keydown",
     (event) => {
