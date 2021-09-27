@@ -6,7 +6,7 @@ yarn add e-nes
 
 # use
 ```
-import { createNes, Button } from "../../src";
+import { createNes, Button } from "e-nes";
 
 const nes = await createNes({ rom: romUrl, canvas });
 ```
