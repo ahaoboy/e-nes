@@ -32,12 +32,12 @@ async function init() {
   const q = new URLSearchParams(location.search).get("rom");
   const { nes, wasm } = await createNes({ rom: q || romUrl, canvas });
   const pad = new GamePad();
-  let checkpoint: string[] = (await get("checkpoint")) || [];
+  let checkpoint: number[] = (await get("checkpoint")) || [];
   const checkpointDiv = document.getElementById("checkpoint")!;
   document.getElementById("save")!.addEventListener("click", () => {
-    const now = new Date().toLocaleString();
+    const now = +new Date();
     checkpoint.push(now);
-    save(wasm, now);
+    save(wasm, now + "");
     set("checkpoint", checkpoint);
     renderDiv();
   });
@@ -48,10 +48,10 @@ async function init() {
   };
   const getDom = () => {
     const wrap = new DocumentFragment();
-    for (const i of checkpoint) {
+    for (let k = 0; k < checkpoint.length; k++) {
+      const i = checkpoint[k];
       const btn = document.createElement("button");
-      btn.innerText = i;
-      btn.id = i;
+      btn.innerText = isPc ? new Date(i).toLocaleString() : k + "";
       btn.addEventListener("mouseup", (e) => {
         e.stopPropagation();
         e.preventDefault();
@@ -59,7 +59,7 @@ async function init() {
           checkpoint = checkpoint.filter((item) => item !== i);
           renderDiv();
         } else {
-          load(wasm, i);
+          load(wasm, i + "");
         }
       });
       wrap.appendChild(btn);
