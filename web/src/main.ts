@@ -1,5 +1,6 @@
 import { createNes, Button, save, load } from "../../src";
 import romUrl from "../island_3_cn.nes?url";
+// import romUrl from "../ml.nes?url";
 import "./style.css";
 import { GamePad, Event } from "e-gamepad";
 import { set, get } from "idb-keyval";
@@ -31,6 +32,29 @@ async function init() {
   const canvas = document.getElementById("nes")! as HTMLCanvasElement;
   const q = new URLSearchParams(location.search).get("rom");
   const { nes, wasm } = await createNes({ rom: q || romUrl, canvas });
+  window.setLife = (n) => {
+    const b = new Uint8Array(wasm.memory.buffer);
+    b[1332212] = n;
+  };
+  // const snapshotBtn = document.getElementById("snapshot")!;
+  // snapshotBtn.addEventListener("click", () => {
+  //   const src = wasm.memory.buffer;
+  //   const ab = new ArrayBuffer(src.byteLength);
+  //   const buf= new Uint8Array(ab)
+  //   buf.set(new Uint8Array(src));
+  //   for (let i = 0; i < buf.length; i++) {
+  //     if (buf[i]) {
+  //       console.log(buf[i]);
+  //       break;
+  //     }
+  //   }
+  //   const blob = new Blob([buf], { type: "binary" });
+  //   const url = URL.createObjectURL(blob);
+  //   const a = document.createElement("a");
+  //   a.download = url;
+  //   a.href = url;
+  //   a.click();
+  // });
   const pad = new GamePad();
   let checkpoint: number[] = (await get("checkpoint")) || [];
   const checkpointDiv = document.getElementById("checkpoint")!;

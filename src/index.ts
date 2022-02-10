@@ -4,12 +4,13 @@ import { Config } from "./type";
 import type { InitOutput } from "./nes-rust";
 import { set, get } from "idb-keyval";
 const setupAudio = (nes: WasmNes) => {
-  const audioContext = AudioContext;
-  if (audioContext === undefined) {
+  if (!globalThis.AudioContext) return;
+  const { AudioContext } = globalThis;
+  if (AudioContext === undefined) {
     throw new Error("This browser seems not to support AudioContext.");
   }
   const bufferLength = 4096;
-  const context = new audioContext({ sampleRate: 44100 });
+  const context = new AudioContext({ sampleRate: 44100 });
   const scriptProcessor = context.createScriptProcessor(bufferLength, 0, 1);
   scriptProcessor.onaudioprocess = (e) => {
     const data = e.outputBuffer.getChannelData(0);
@@ -58,6 +59,7 @@ export const createNes: (
     ctx.putImageData(imageData, 0, 0);
   };
   stepFrame();
+  window.wasm = wasm;
   return { nes, wasm };
 };
 const clone = (src: ArrayBuffer) => {
