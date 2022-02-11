@@ -59,7 +59,7 @@ export const createNes: (
     ctx.putImageData(imageData, 0, 0);
   };
   stepFrame();
-  window.wasm = wasm;
+  // window.wasm = wasm;
   return { nes, wasm };
 };
 const clone = (src: ArrayBuffer) => {
