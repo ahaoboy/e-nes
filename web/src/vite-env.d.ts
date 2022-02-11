@@ -2,4 +2,5 @@
 
 interface Window {
   setLife: (n: number) => void;
+  wasm:any;
 }
