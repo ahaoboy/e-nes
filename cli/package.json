@@ -1,0 +1,22 @@
+{
+  "name": "e-nes-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "files": ["dist"],
+  "bin": {
+    "e-nes": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "esbuild ./src/index.ts --bundle --outfile=./dist/index.js --platform=node --external:sharp",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "阿豪boy",
+  "license": "ISC",
+  "dependencies": {
+    "adaptive-threshold-wasm": "^0.0.1",
+    "ascii-artist": "^0.0.7",
+    "cli-cursor": "^4.0.0"
+  }
+}
